@@ -2,23 +2,38 @@
 <html>
 <body>
   <script>
-    // 从 URL 参数中获取数据
     const urlParams = new URLSearchParams(window.location.search);
     const email = urlParams.get('email');
 
-    // 发送 POST 请求到 Power Automate
     fetch('https://prod-145.westus.logic.azure.com:443/workflows/832ea95f645d41cc84470e2728f83445/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=iNMsHSmnp9sMgtR3epr-wU5BUijLs0dwTyyDWzEltHA', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ Email: email })
     })
     .then(() => {
-      document.body.innerHTML = "<h1>审批已提交！</h1>"; //  显示成功页面
+      // 显示成功提示，5秒后关闭窗口
+      document.body.innerHTML = `
+        <h1>审批已提交！</h1>
+        <p>页面将在 <span id="countdown">5</span> 秒后自动关闭...</p>
+      `;
+      
+      // 倒计时显示
+      let seconds = 5;
+      const countdownElement = document.getElementById("countdown");
+      const timer = setInterval(() => {
+        seconds--;
+        countdownElement.textContent = seconds;
+        if (seconds <= 0) {
+          clearInterval(timer);
+          window.close(); // 关闭窗口
+        }
+      }, 1000);
     })
     .catch(error => {
-      document.body.innerHTML = "<h1>提交失败，请重试。</h1>";
+      document.body.innerHTML = `
+        <h1 style="color: red;">提交失败，请重试。</h1>
+        <button onclick="window.close()">关闭</button>
+      `;
     });
   </script>
 </body>
