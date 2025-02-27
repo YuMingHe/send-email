@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <script>
+    // 从 URL 参数中获取数据
+    const urlParams = new URLSearchParams(window.location.search);
+    const email = urlParams.get('email');
+
+    // 发送 POST 请求到 Power Automate
+    fetch('https://prod-145.westus.logic.azure.com:443/workflows/832ea95f645d41cc84470e2728f83445/triggers/manual/paths/invoke', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ Email: email })
+    })
+    .then(() => {
+      document.body.innerHTML = "<h1>审批已提交！</h1>"; //  显示成功页面
+    })
+    .catch(error => {
+      document.body.innerHTML = "<h1>提交失败，请重试。</h1>";
+    });
+  </script>
+</body>
+</html>
