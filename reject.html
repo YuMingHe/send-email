@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .container { max-width: 500px; margin: 0 auto; }
+        textarea { width: 100%; height: 100px; margin: 10px 0; }
+        button { padding: 10px 20px; background: #dc3545; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>请输入拒绝理由</h2>
+        <textarea id="reason" placeholder="请在此输入原因..."></textarea>
+        <button onclick="submitRejection()">提交拒绝</button>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        // 从 URL 获取邮箱参数
+        const urlParams = new URLSearchParams(window.location.search);
+        const email = urlParams.get('email');
+
+        // 提交拒绝理由到 Power Automate
+        function submitRejection() {
+            const reason = document.getElementById('reason').value;
+            if (!reason) {
+                alert('请填写拒绝理由！');
+                return;
+            }
+
+            // 显示加载状态
+            document.getElementById('message').innerHTML = "提交中...";
+
+            // 发送 POST 请求
+            fetch('https://prod-149.westus.logic.azure.com:443/workflows/244abfb0e4fd42cc82d95caa3f40da04/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=klFWgdFpGCKe6aNpToGsjvERLt-Ywa4U_CKM2Ef69VE', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    Email: email,
+                    RejectionReason: reason 
+                })
+            })
+            .then(() => {
+                // 提交成功，显示提示并自动关闭
+                document.getElementById('message').innerHTML = "拒绝理由已提交，5秒后关闭...";
+                setTimeout(() => window.close(), 5000);
+            })
+            .catch(error => {
+                document.getElementById('message').innerHTML = `提交失败: ${error}`;
+            });
+        }
+    </script>
+</body>
+</html>
