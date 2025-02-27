@@ -7,7 +7,7 @@
     const email = urlParams.get('email');
 
     // 发送 POST 请求到 Power Automate
-    fetch('https://prod-145.westus.logic.azure.com:443/workflows/832ea95f645d41cc84470e2728f83445/triggers/manual/paths/invoke', {
+    fetch('https://prod-145.westus.logic.azure.com:443/workflows/832ea95f645d41cc84470e2728f83445/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=iNMsHSmnp9sMgtR3epr-wU5BUijLs0dwTyyDWzEltHA', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
