@@ -43,8 +43,8 @@
             })
             .then(() => {
                 // 提交成功，显示提示并自动关闭
-                document.getElementById('message').innerHTML = "拒绝理由已提交，5秒后关闭...";
-                setTimeout(() => window.close(), 5000);
+                document.getElementById('message').innerHTML = "拒绝理由已提交，3秒后关闭...";
+                setTimeout(() => window.close(), 3000);
             })
             .catch(error => {
                 document.getElementById('message').innerHTML = `提交失败: ${error}`;
